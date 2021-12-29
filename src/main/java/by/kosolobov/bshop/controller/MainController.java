@@ -1,4 +1,4 @@
-package by.kosolobov.bshop.servlet;
+package by.kosolobov.bshop.controller;
 
 import by.kosolobov.bshop.command.CommandDefiner;
 import by.kosolobov.bshop.command.SimpleCommand;
