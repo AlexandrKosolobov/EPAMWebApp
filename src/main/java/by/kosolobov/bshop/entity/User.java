@@ -6,23 +6,23 @@ public class User {
     private final String password; //todo: remove password definition from class User and add encryption of password while adding to database
     private final String firstName;
     private final String secondName;
-    private final String serName;
+    private final String surName;
 
-    public User(String username, String password, String firstName, String secondName, String serName) {
+    public User(String username, String password, String firstName, String secondName, String surName) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.serName = serName;
+        this.surName = surName;
     }
 
-    public User(int userId, String username, String password, String firstName, String secondName, String serName) {
+    public User(int userId, String username, String password, String firstName, String secondName, String surName) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.serName = serName;
+        this.surName = surName;
     }
 
     public int getUserId() {
@@ -45,8 +45,8 @@ public class User {
         return secondName;
     }
 
-    public String getSerName() {
-        return serName;
+    public String getSurName() {
+        return surName;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class User {
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
         if (secondName != null ? !secondName.equals(user.secondName) : user.secondName != null) return false;
-        return serName != null ? serName.equals(user.serName) : user.serName == null;
+        return surName != null ? surName.equals(user.surName) : user.surName == null;
     }
 
     @Override
@@ -69,13 +69,13 @@ public class User {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
-        result = 31 * result + (serName != null ? serName.hashCode() : 0);
+        result = 31 * result + (surName != null ? surName.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "User{username:%s, password:%s, firstName:%s, secondName:%s, serName:%s}".formatted(username, password, firstName, secondName, serName);
+        return "User{username:%s, password:%s, firstName:%s, secondName:%s, serName:%s}".formatted(username, password, firstName, secondName, surName);
     }
 
     public static class UserBuilder {
@@ -84,7 +84,7 @@ public class User {
         private String password;
         private String firstName;
         private String secondName;
-        private String serName;
+        private String surName;
 
         public UserBuilder userId(int value) {
             userId = value;
@@ -111,16 +111,16 @@ public class User {
             return this;
         }
 
-        public UserBuilder serName(String value) {
-            serName = value;
+        public UserBuilder surName(String value) {
+            surName = value;
             return this;
         }
 
         public User build() {
             if (userId == 0) {
-                return new User(username, password, firstName, secondName, serName);
+                return new User(username, password, firstName, secondName, surName);
             } else {
-                return new User(userId, username, password, firstName, secondName, serName);
+                return new User(userId, username, password, firstName, secondName, surName);
             }
         }
     }
