@@ -32,7 +32,7 @@ public enum MainDao {
                 ConnectionPool.getInstance().releaseConnection(connection);
             }
 
-            log.log(Level.INFO, "Executing SQL:\n {} success", builder);
+            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
             builder.delete(0, builder.length());
             return users;
         }
@@ -53,7 +53,7 @@ public enum MainDao {
                 ConnectionPool.getInstance().releaseConnection(connection);
             }
 
-            log.log(Level.INFO, "Executing SQL:\n {} success", builder);
+            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
             builder.delete(0, builder.length());
             return services;
         }
@@ -74,7 +74,7 @@ public enum MainDao {
                 ConnectionPool.getInstance().releaseConnection(connection);
             }
 
-            log.log(Level.INFO, "Executing SQL:\n {} success", builder);
+            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
             builder.delete(0, builder.length());
             return books;
         }
@@ -162,16 +162,18 @@ public enum MainDao {
     public boolean execute() throws SQLException {
         builder.append(";");
         Connection connection = ConnectionPool.getInstance().getConnection();
-        boolean execute = false;
 
         try (Statement statement = connection.createStatement()) {
-            execute = statement.execute(builder.toString());
+            statement.execute(builder.toString());
+        } catch (SQLException e) {
+            log.log(Level.ERROR, "Executing:\n    {} error: {}", builder, e.getMessage());
+            return false;
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }
 
-        log.log(Level.INFO, "Executing:\n {} success", builder);
+        log.log(Level.INFO, "Executing:\n    {} success", builder);
         builder.delete(0, builder.length());
-        return execute;
+        return true;
     }
 }

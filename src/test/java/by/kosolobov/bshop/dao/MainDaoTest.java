@@ -10,23 +10,24 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Stack;
 
+import static by.kosolobov.bshop.sql.MySQLQueryContainer.COLUMNS_SERVICE;
+import static by.kosolobov.bshop.sql.MySQLQueryContainer.TABLE_SERVICE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainDaoTest {
     MainDao dao = MainDao.SERVICE_DAO;
 
     void select() throws SQLException {
-        Stack<Service> services = dao.select("services", "service_id", "service_name").executeSql();
+        Stack<Service> services = dao.select(TABLE_SERVICE, COLUMNS_SERVICE).executeSql();
         for (Service service : services) {
-            System.out.println("%d : %s".formatted(service.getServiceId(), service.getServiceName()));
+            System.out.printf("%d : %s%n", service.getServiceId(), service.getServiceName());
         }
     }
 
     void insert() throws SQLException {
-        boolean success = dao.insert("services",  "service_name")
+        dao.insert(TABLE_SERVICE,  "service_name")
                 .values("test")
                 .execute();
-        System.out.println(success);
     }
 
     void update() throws SQLException {
@@ -34,17 +35,16 @@ class MainDaoTest {
         HashMap<String, String> setMap = new HashMap<>();
         whereMap.put("service_name", "test");
         setMap.put("service_name", "test");
-        boolean success = dao.update("services")
+        dao.update(TABLE_SERVICE)
                 .set(setMap)
                 .where(whereMap)
                 .execute();
-        System.out.println(success);
     }
 
     void delete() throws SQLException {
         HashMap<String, String> whereMap = new HashMap<>();
         whereMap.put("service_name", "test");
-        boolean success = dao.delete("services")
+        dao.delete(TABLE_SERVICE)
                 .where(whereMap)
                 .execute();
     }
