@@ -9,19 +9,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class BShopConnector {
-    private static final Logger log = LogManager.getLogger(BShopConnector.class);
+public class MySQLConnector {
+    private static final Logger log = LogManager.getLogger(MySQLConnector.class);
     private static final BShopPropertyReader reader = new BShopPropertyReader();
 
     static {
         try {
             Class.forName(reader.get("db.driver"));
         } catch (ClassNotFoundException e) {
-            log.log(Level.FATAL, "MySQL driver class not found: {}", e.getMessage());
+            log.log(Level.FATAL, "MySQL driver \"{}\" not found: {}", reader.get("db.driver"), e.getMessage());
         }
     }
 
-    private BShopConnector() {
+    private MySQLConnector() {
     }
 
     public static Connection getConnection() throws SQLException {

@@ -5,13 +5,13 @@
     <title>BarberShop Manager</title>
 </head>
 <body>
-<form action="controller">
+<form method="post" action="controller">
     <label>
-        <input type="text" name="username" placeholder="username">
+        <input type="text" name="username" placeholder="username" required>
     </label>
     <br/>
     <label>
-        <input type="password" name="password" placeholder="password">
+        <input type="password" name="password" placeholder="password" required>
     </label>
     <br/>
     <input type="submit" value="Log in">
@@ -19,18 +19,19 @@
         <input type="checkbox" name="remember">Remember me
     </label>
     <label>
-        <input type="text" name="command" value="CHECK_USER" hidden>
+        <input type="hidden" name="command" value="CHECK_USER">
     </label>
 </form>
-<form action="registration.jsp">
+<form method="post" action="controller">
     <label>
-        <input type="text" name="command" value="REG_USER" hidden>
+        <input type="hidden" name="command" value="SIGNUP_USER">
+        ${cookie.get("username")}
     </label>
-    <input type="submit" value="Registration">
+    <input type="submit" value="Sign up">
 </form>
 <br/>
 <label>
-    ${param.get("checked") != null? "Incorrect password" : ""}
+    ${requestScope.get("error") != null? "Incorrect password" : ""}
 </label>
 </body>
 </html>

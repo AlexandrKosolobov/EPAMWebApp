@@ -14,17 +14,15 @@
 <body>
 
 <form action="controller">
-    username: ${param.get("username")}
+    username: ${requestScope.get("username")}
     <br/>
-    password: ${param.get("password")}
+    First name: ${requestScope.get("first_name")}
     <br/>
-    First name: ${param.get("first_name")}
+    Second name: ${requestScope.get("second_name")}
     <br/>
-    Second name: ${param.get("second_name")}
+    Surname: ${requestScope.get("sur_name")}
     <br/>
-    Surname: ${param.get("sur_name")}
-    <br/>
-    Status: ${param.get("is_barber") != null ? "Barber" : "Client"}
+    Status: ${requestScope.get("is_barber") != null && requestScope.get("is_barber").equals("true") ? "Barber" : "Client"}
     <br/>
     <input type='submit' value='Booking'>
 </form>

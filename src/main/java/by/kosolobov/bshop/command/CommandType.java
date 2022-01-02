@@ -1,9 +1,7 @@
 package by.kosolobov.bshop.command;
 
-import by.kosolobov.bshop.command.impl.CheckUser;
-
 public enum CommandType {
-    CHECK_USER(new CheckUser())//,
+//    CHECK_USER(),
 //    ADD_USER(),
 //    DELETE_USER,
     ;

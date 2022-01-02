@@ -14,9 +14,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-@WebServlet(name = "MainController",urlPatterns = {"/controller", "*.do"})
+@WebServlet(name = "MainController",urlPatterns = "/controller")
 public class MainController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(MainController.class);
+    private static final String COMMAND = "command";
+    private static final String ERROR = "error";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,16 +31,16 @@ public class MainController extends HttpServlet {
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String strCommand = req.getParameter("command");
+        String strCommand = req.getParameter(COMMAND);
         SimpleCommand command = CommandDefiner.define(strCommand);
+        String path = command.execute(req);
 
-        if (command.execute(req)) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher(command.getRedirectPath());
+        if (path != null) {
+            RequestDispatcher dispatcher = req.getRequestDispatcher(path);
             dispatcher.forward(req, resp);
         } else {
-            log.log(Level.ERROR, "Executing command \"{}\" failed!", strCommand);
-            req.getSession().setAttribute("error", strCommand);
-            resp.sendRedirect(req.getContextPath() + "/menu.jsp");
+            log.log(Level.WARN, "Executing command \"{}\" failed!", strCommand);
+            req.setAttribute(ERROR, strCommand);
         }
     }
 }

@@ -6,15 +6,15 @@
     </head>
     <body>
 
-    <form action="controller">
+    <form action="login.jsp">
         <label>
-            <button name="login">Log in</button>
+            <button>Log in</button>
         </label>
     </form>
 
-    <form action="controller">
+    <form action="signup.jsp">
         <label>
-            <button name="signup">Sign up</button>
+            <button>Sign up</button>
         </label>
     </form>
 
