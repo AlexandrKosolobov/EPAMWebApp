@@ -14,7 +14,9 @@
 <body>
 
 <form action="controller">
-    username: ${requestScope.get("username")}
+    Username: ${requestScope.get("username")}
+    <br/>
+    Status: ${requestScope.get("user_role")}
     <br/>
     First name: ${requestScope.get("first_name")}
     <br/>
@@ -22,7 +24,11 @@
     <br/>
     Surname: ${requestScope.get("sur_name")}
     <br/>
-    Status: ${requestScope.get("is_barber") != null && requestScope.get("is_barber").equals("true") ? "Barber" : "Client"}
+    Email: ${requestScope.get("user_email")}
+    <br/>
+    Phone: ${requestScope.get("user_phone")}
+    <br/>
+    Description: ${requestScope.get("user_desc")}
     <br/>
     <input type='submit' value='Booking'>
 </form>

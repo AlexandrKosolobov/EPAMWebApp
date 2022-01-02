@@ -7,17 +7,18 @@ import by.kosolobov.bshop.entity.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Stack;
+import java.util.Locale;
+import java.util.ArrayDeque;
 
 public class EntityMapper {
-    public Stack<User> mapUser(ResultSet userSet) throws SQLException {
-        Stack<User> users = new Stack<>();
+    public ArrayDeque<User> mapUser(ResultSet userSet) throws SQLException {
+        ArrayDeque<User> users = new ArrayDeque<>();
         User.UserBuilder builder = new User.UserBuilder();
 
         while (userSet.next()) {
             builder.setUserId(userSet.getInt(1));
             builder.setUsername(userSet.getString(2));
-            builder.setUserRole(Role.valueOf(userSet.getString(4)));
+            builder.setUserRole(Role.valueOf(userSet.getString(4).toUpperCase(Locale.ROOT)));
             builder.setFirstName(userSet.getString(5));
             builder.setSecondName(userSet.getString(6));
             builder.setSurName(userSet.getString(7));
@@ -32,8 +33,8 @@ public class EntityMapper {
         return users;
     }
 
-    public Stack<Service> mapService(ResultSet serviceSet) throws SQLException {
-        Stack<Service> services = new Stack<>();
+    public ArrayDeque<Service> mapService(ResultSet serviceSet) throws SQLException {
+        ArrayDeque<Service> services = new ArrayDeque<>();
 
         while (serviceSet.next()) {
             services.push(new Service(serviceSet.getInt(1), serviceSet.getString(2)));
@@ -43,8 +44,8 @@ public class EntityMapper {
         return services;
     }
 
-    public Stack<Book> mapBook(ResultSet bookSet) throws SQLException {
-        Stack<Book> books = new Stack<>();
+    public ArrayDeque<Book> mapBook(ResultSet bookSet) throws SQLException {
+        ArrayDeque<Book> books = new ArrayDeque<>();
         Book.BookBuilder builder = new Book.BookBuilder();
 
         while (bookSet.next()) {

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.COLUMNS_SERVICE;
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.TABLE_SERVICE;
@@ -18,7 +18,7 @@ class MainDaoTest {
     MainDao dao = MainDao.SERVICE_DAO;
 
     void select() throws SQLException {
-        Stack<Service> services = dao.select(TABLE_SERVICE, COLUMNS_SERVICE).executeSql();
+        ArrayDeque<Service> services = dao.select(TABLE_SERVICE, COLUMNS_SERVICE).executeSql();
         for (Service service : services) {
             System.out.printf("%d : %s%n", service.getServiceId(), service.getServiceName());
         }

@@ -14,16 +14,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 public enum MainDao {
     USER_DAO {
 
-        public Stack<User> executeSql() throws SQLException {
+        public ArrayDeque<User> executeSql() throws SQLException {
             builder.append(";");
             Connection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
-            Stack<User> users;
+            ArrayDeque<User> users = null;
 
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(builder.toString());
@@ -40,11 +40,11 @@ public enum MainDao {
     },
     SERVICE_DAO {
 
-        public Stack<Service> executeSql() throws SQLException {
+        public ArrayDeque<Service> executeSql() throws SQLException {
             builder.append(";");
             Connection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
-            Stack<Service> services;
+            ArrayDeque<Service> services = null;
 
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(builder.toString());
@@ -61,11 +61,11 @@ public enum MainDao {
     },
     BOOK_DAO {
 
-        public Stack<Book> executeSql() throws SQLException {
+        public ArrayDeque<Book> executeSql() throws SQLException {
             builder.append(";");
             Connection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
-            Stack<Book> books;
+            ArrayDeque<Book> books = null;
 
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(builder.toString());
@@ -84,7 +84,7 @@ public enum MainDao {
     private static final EntityMapper ENTITY_MAPPER = new EntityMapper();
     final StringBuilder builder = new StringBuilder();
 
-    public abstract <E> Stack<E> executeSql() throws SQLException;
+    public abstract <E> ArrayDeque<E> executeSql() throws SQLException;
 
     public MainDao select(String table, String... columns) {
         builder.append("SELECT");
