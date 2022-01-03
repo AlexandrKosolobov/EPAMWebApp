@@ -18,17 +18,27 @@ import static by.kosolobov.bshop.sql.MySQLQueryContainer.TABLE_USER;
 
 public class CheckUser implements SimpleCommand {
     private static final Logger log = LogManager.getLogger(CheckUser.class);
+    private static final String USER_ID = "user_id";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String ROLE = "user_role";
+    private static final String FIRST_NAME = "first_name";
+    private static final String SECOND_NAME = "second_name";
+    private static final String SUR_NAME = "sur_name";
+    private static final String USER_EMAIL = "user_email";
+    private static final String USER_PHONE = "user_phone";
+    private static final String DESCRIPTION = "user_desc";
 
     @Override
     public String execute(HttpServletRequest req) {
         MainDao dao = MainDao.USER_DAO;
         User user = null;
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String username = req.getParameter(USERNAME);
+        String password = req.getParameter(PASSWORD);
         Map<String, String> columnValue = new HashMap<>();
 
-        columnValue.put("username", username);
-        columnValue.put("password", password);
+        columnValue.put(USERNAME, username);
+        columnValue.put(PASSWORD, password);
 
         try {
             ArrayDeque<User> users = dao.select(TABLE_USER, COLUMNS_USER)
@@ -45,15 +55,15 @@ public class CheckUser implements SimpleCommand {
         }
 
         assert user != null;
-        req.setAttribute("user_id", user.getUserId());
-        req.setAttribute("username", user.getUsername());
-        req.setAttribute("user_role", user.getUserRole());
-        req.setAttribute("first_name", user.getFirstName());
-        req.setAttribute("second_name", user.getSecondName());
-        req.setAttribute("sur_name", user.getSurName());
-        req.setAttribute("user_email", user.getEmail());
-        req.setAttribute("user_phone", user.getPhone());
-        req.setAttribute("user_desc", user.getDescription());
+        req.setAttribute(USER_ID, user.getUserId());
+        req.setAttribute(USERNAME, user.getUsername());
+        req.setAttribute(ROLE, user.getUserRole());
+        req.setAttribute(FIRST_NAME, user.getFirstName());
+        req.setAttribute(SECOND_NAME, user.getSecondName());
+        req.setAttribute(SUR_NAME, user.getSurName());
+        req.setAttribute(USER_EMAIL, user.getEmail());
+        req.setAttribute(USER_PHONE, user.getPhone());
+        req.setAttribute(DESCRIPTION, user.getDescription());
 
         return "person.jsp";
     }
