@@ -51,7 +51,7 @@ public class CheckUser implements SimpleCommand {
 
             user = users.pop();
         } catch (SQLException e) {
-            log.log(Level.ERROR, "Error checking user: {}", e.getMessage());
+            log.log(Level.ERROR, "Error checking user: {}", e.getMessage(), e);
         }
 
         assert user != null;

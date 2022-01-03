@@ -26,7 +26,7 @@ public class AddService implements SimpleCommand {
                     .values(serviceName)
                     .execute();
         } catch (SQLException e) {
-            log.log(Level.ERROR, "Adding service failed: {}", e.getMessage());
+            log.log(Level.ERROR, "Adding service failed: {}", e.getMessage(), e);
         }
 
         return "service_list.jsp";

@@ -25,9 +25,9 @@ public class ConnectionPool {
             }
             log.log(Level.INFO, "Connection pool initialization successful");
         } catch (SQLException e) {
-            log.log(Level.ERROR, "Connection pool initialization error: {}", e.getMessage());
+            log.log(Level.ERROR, "Connection pool initialization error: {}", e.getMessage(), e);
         } catch (InterruptedException e) {
-            log.log(Level.ERROR, "Connection pool initialization interrupted: {}", e.getMessage());
+            log.log(Level.ERROR, "Connection pool initialization interrupted: {}", e.getMessage(), e);
         }
     }
 
@@ -52,7 +52,7 @@ public class ConnectionPool {
             connection = FREE_POOL.take();
             USE_POOL.put(connection);
         } catch (InterruptedException e) {
-            log.log(Level.ERROR, "Getting connection from connection pool interrupted: {}", e.getMessage());
+            log.log(Level.ERROR, "Getting connection from connection pool interrupted: {}", e.getMessage(), e);
         }
         return connection;
     }
@@ -64,7 +64,7 @@ public class ConnectionPool {
                 log.log(Level.WARN, "Illegal operation! Can not release connection that is not in use!");
             }
         } catch (InterruptedException e) {
-            log.log(Level.ERROR, "Realising connection interrupted: {}", e.getMessage());
+            log.log(Level.ERROR, "Realising connection interrupted: {}", e.getMessage(), e);
         }
     }
 
@@ -82,7 +82,7 @@ public class ConnectionPool {
 
             log.log(Level.INFO, "Destroying connection pool successful");
         } catch (SQLException e) {
-            log.log(Level.WARN, "Destroying connection pool failed");
+            log.log(Level.WARN, "Destroying connection pool failed: {}", e.getMessage(), e);
         }
     }
 }

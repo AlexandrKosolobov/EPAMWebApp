@@ -16,9 +16,9 @@ public class Cryptographer {
         try {
             cipher = Cipher.getInstance("AES");
         } catch (NoSuchAlgorithmException e) {
-            log.log(Level.ERROR, "Cipher algorithm not found: {}", e.getMessage());
+            log.log(Level.ERROR, "Cipher algorithm not found: {}", e.getMessage(), e);
         } catch (NoSuchPaddingException e) {
-            log.log(Level.ERROR, "Cipher padding not found: {}", e.getMessage());
+            log.log(Level.ERROR, "Cipher padding not found: {}", e.getMessage(), e);
         }
     }
 

@@ -166,7 +166,7 @@ public enum MainDao {
         try (Statement statement = connection.createStatement()) {
             statement.execute(builder.toString());
         } catch (SQLException e) {
-            log.log(Level.ERROR, "Executing:\n    {} error: {}", builder, e.getMessage());
+            log.log(Level.ERROR, "Executing:\n    {} error: {}", builder, e.getMessage(), e);
             return false;
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);

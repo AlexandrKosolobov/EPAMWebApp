@@ -63,9 +63,9 @@ public class BShopPropertyReader {
         try (FileInputStream fis = new FileInputStream(propertyFile)) {
             properties.load(fis);
         } catch (FileNotFoundException e) {
-            log.log(Level.FATAL, "Properties file not found: {}", e.getMessage());
+            log.log(Level.FATAL, "Properties file not found: {}", e.getMessage(), e);
         } catch (IOException e) {
-            log.log(Level.FATAL, "Reading database properties failed: {}", e.getMessage());
+            log.log(Level.FATAL, "Reading database properties failed: {}", e.getMessage(), e);
         }
         log.log(Level.INFO, "Reading property file successful: {}", url.getFile());
     }

@@ -13,7 +13,7 @@ public class CommandDefiner {
         try {
             type = CommandType.valueOf(strCommand);
         } catch (IllegalArgumentException e) {
-            log.log(Level.ERROR, "Illegal command type! Redirecting to main menu! Error message: {}", e.getMessage());
+            log.log(Level.ERROR, "Illegal command type! Redirecting to main menu! Error message: {}", e.getMessage(), e);
             type = CommandType.valueOf(DEFAULT_ERROR_COMMAND);
         }
 
