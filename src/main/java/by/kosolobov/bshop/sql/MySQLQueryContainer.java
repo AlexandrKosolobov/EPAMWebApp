@@ -11,6 +11,7 @@ public final class MySQLQueryContainer {
     //--------------------------- COLUMNS ---------------------------//
     public static final String[] COLUMNS_USER = {"user_id", "username", "password", "user_role",
             "first_name", "second_name", "sur_name", "user_email", "user_phone", "user_desc"};
+    public static final String[] COLUMNS_USER_MIN = {"username", "password", "user_role"};
     public static final String[] COLUMNS_SERVICE = {"service_id", "service_name"};
     public static final String[] COLUMNS_BOOK = {"client_id", "barber_id", "service_id",
             "book_date", "book_time", "is_active"};
