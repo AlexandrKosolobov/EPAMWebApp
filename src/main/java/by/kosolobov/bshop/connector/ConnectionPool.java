@@ -21,7 +21,7 @@ public class ConnectionPool {
     private ConnectionPool() {
         try {
             for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-                    FREE_POOL.put(MySQLConnector.getConnection());
+                    FREE_POOL.put(SQLConnector.getConnection());
             }
             log.log(Level.INFO, "Connection pool initialization successful");
         } catch (SQLException e) {

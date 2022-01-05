@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.ArrayDeque;
 
@@ -18,7 +19,7 @@ class MainDaoTest {
     MainDao dao = MainDao.SERVICE_DAO;
 
     void select() throws SQLException {
-        ArrayDeque<Service> services = dao.select(TABLE_SERVICE, COLUMNS_SERVICE).executeSql();
+        Deque<Service> services = dao.select(TABLE_SERVICE, COLUMNS_SERVICE).executeSql();
         for (Service service : services) {
             System.out.printf("%d : %s%n", service.getServiceId(), service.getServiceName());
         }
@@ -31,21 +32,15 @@ class MainDaoTest {
     }
 
     void update() throws SQLException {
-        HashMap<String, String> whereMap = new HashMap<>();
-        HashMap<String, String> setMap = new HashMap<>();
-        whereMap.put("service_name", "test");
-        setMap.put("service_name", "test");
         dao.update(TABLE_SERVICE)
-                .set(setMap)
-                .where(whereMap)
+                .set("service_name", "test")
+                .where("service_name", "test")
                 .execute();
     }
 
     void delete() throws SQLException {
-        HashMap<String, String> whereMap = new HashMap<>();
-        whereMap.put("service_name", "test");
         dao.delete(TABLE_SERVICE)
-                .where(whereMap)
+                .where("service_name", "test")
                 .execute();
     }
 

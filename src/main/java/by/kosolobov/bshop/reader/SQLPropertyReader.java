@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-public class BShopPropertyReader {
-    private static final Logger log = LogManager.getLogger(BShopPropertyReader.class);
+public class SQLPropertyReader {
+    private static final Logger log = LogManager.getLogger(SQLPropertyReader.class);
     private static final Properties properties = new Properties();
     private static final String DEFAULT_PROPERTY_PATH = "mysql-config.properties";
 
     static {
-        URL url = BShopPropertyReader.class
+        URL url = SQLPropertyReader.class
                 .getClassLoader()
                 .getResource(DEFAULT_PROPERTY_PATH);
 
@@ -33,7 +33,7 @@ public class BShopPropertyReader {
     }
 
     public void updatePropertiesFile() {
-        URL url = BShopPropertyReader.class
+        URL url = SQLPropertyReader.class
                 .getClassLoader()
                 .getResource(DEFAULT_PROPERTY_PATH);
 
@@ -46,7 +46,7 @@ public class BShopPropertyReader {
     }
 
     public void updatePropertiesFile(String propertiesFilePath) {
-        URL url = BShopPropertyReader.class
+        URL url = SQLPropertyReader.class
                 .getClassLoader()
                 .getResource(propertiesFilePath);
 

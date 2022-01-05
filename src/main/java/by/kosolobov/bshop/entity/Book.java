@@ -2,6 +2,7 @@ package by.kosolobov.bshop.entity;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.StringJoiner;
 
 public class Book {
     private final int clientId;
@@ -42,6 +43,44 @@ public class Book {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        if (clientId != book.clientId) return false;
+        if (barberId != book.barberId) return false;
+        if (serviceId != book.serviceId) return false;
+        if (isActive != book.isActive) return false;
+        if (bookDate != null ? !bookDate.equals(book.bookDate) : book.bookDate != null) return false;
+        return bookTime != null ? bookTime.equals(book.bookTime) : book.bookTime == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = clientId;
+        result = 31 * result + barberId;
+        result = 31 * result + serviceId;
+        result = 31 * result + (bookDate != null ? bookDate.hashCode() : 0);
+        result = 31 * result + (bookTime != null ? bookTime.hashCode() : 0);
+        result = 31 * result + (isActive ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
+                .add("clientId=" + clientId)
+                .add("barberId=" + barberId)
+                .add("serviceId=" + serviceId)
+                .add("bookDate=" + bookDate)
+                .add("bookTime=" + bookTime)
+                .add("isActive=" + isActive)
+                .toString();
     }
 
     public static class BookBuilder {

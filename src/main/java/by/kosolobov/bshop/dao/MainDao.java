@@ -13,13 +13,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 public enum MainDao {
     USER_DAO {
 
-        public ArrayDeque<User> executeSql() throws SQLException {
+        public Deque<User> executeSql() throws SQLException {
             builder.append(";");
             Connection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
@@ -40,7 +40,7 @@ public enum MainDao {
     },
     SERVICE_DAO {
 
-        public ArrayDeque<Service> executeSql() throws SQLException {
+        public Deque<Service> executeSql() throws SQLException {
             builder.append(";");
             Connection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
@@ -61,7 +61,7 @@ public enum MainDao {
     },
     BOOK_DAO {
 
-        public ArrayDeque<Book> executeSql() throws SQLException {
+        public Deque<Book> executeSql() throws SQLException {
             builder.append(";");
             Connection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
@@ -79,12 +79,32 @@ public enum MainDao {
             return books;
         }
 
+    },
+    SERVICE_DAO_FULL {
+
+        public Deque<Service> executeSql() throws SQLException {
+            builder.append(";");
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ResultSet resultSet = null;
+            ArrayDeque<Service> services = null;
+
+            try (Statement statement = connection.createStatement()) {
+                resultSet = statement.executeQuery(builder.toString());
+                services = ENTITY_MAPPER.mapServiceFull(resultSet);
+            } finally {
+                ConnectionPool.getInstance().releaseConnection(connection);
+            }
+
+            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
+            builder.delete(0, builder.length());
+            return services;
+        }
     };
     private static final Logger log = LogManager.getLogger(MainDao.class);
     private static final EntityMapper ENTITY_MAPPER = new EntityMapper();
     final StringBuilder builder = new StringBuilder();
 
-    public abstract <E> ArrayDeque<E> executeSql() throws SQLException;
+    public abstract <E> Deque<E> executeSql() throws SQLException;
 
     public MainDao select(String table, String... columns) {
         builder.append("SELECT");
@@ -122,15 +142,14 @@ public enum MainDao {
         return this;
     }
 
-    public MainDao where(Map<String, String> columnValue) {
-        builder.append("WHERE");
+    public MainDao where(String column, String value) {
+        builder.append("WHERE %s = '%s' ".formatted(column, value));
 
-        for (Map.Entry<String, String> entry : columnValue.entrySet()) {
-            builder.append(" %s = '%s' AND".formatted(entry.getKey(), entry.getValue()));
-        }
-        int last = builder.length();
-        builder.delete(last - 4, last);
-        builder.append(" ");
+        return this;
+    }
+
+    public MainDao andWhere(String column, String value) {
+        builder.append("AND %s = '%s' ".formatted(column, value));
 
         return this;
     }
@@ -148,13 +167,38 @@ public enum MainDao {
         return this;
     }
 
-    public MainDao set(Map<String, String> columnValue) {
-        builder.append("SET");
+    public MainDao set(String column, String value) {
+        builder.append("SET %s = '%s' ".formatted(column, value));
 
-        for (Map.Entry<String, String> entry : columnValue.entrySet()) {
-            builder.append(" %s = '%s'".formatted(entry.getKey(), entry.getValue()));
-        }
-        builder.append(" ");
+        return this;
+    }
+
+    public MainDao andSet(String column, String value) {
+        builder.append(", %s = %s ".formatted(column, value));
+
+        return this;
+    }
+
+    public MainDao join(String table) {
+        builder.append("JOIN %s ".formatted(table));
+
+        return this;
+    }
+
+    public MainDao onStart(String column1, String column2) {
+        builder.append("ON (%s = %s".formatted(column1, column2));
+
+        return this;
+    }
+
+    public MainDao andOn(String column1, String column2) {
+        builder.append(", %s = %s".formatted(column1, column2));
+
+        return this;
+    }
+
+    public MainDao onEnd() {
+        builder.append(") ");
 
         return this;
     }
@@ -175,5 +219,22 @@ public enum MainDao {
         log.log(Level.INFO, "Executing:\n    {} success", builder);
         builder.delete(0, builder.length());
         return true;
+    }
+
+    public ResultSet rowExecuteSql() throws SQLException {
+        builder.append(";");
+        Connection connection = ConnectionPool.getInstance().getConnection();
+        ResultSet resultSet = null;
+        ArrayDeque<Book> books = null;
+
+        try (Statement statement = connection.createStatement()) {
+            resultSet = statement.executeQuery(builder.toString());
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(connection);
+        }
+
+        log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
+        builder.delete(0, builder.length());
+        return resultSet;
     }
 }

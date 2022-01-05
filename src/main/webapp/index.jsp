@@ -5,18 +5,15 @@
         <title>BarberShopManager</title>
     </head>
     <body>
-
     <form action="login.jsp">
         <label>
             <button>Log in</button>
         </label>
     </form>
-
     <form action="signup.jsp">
         <label>
             <button>Sign up</button>
         </label>
     </form>
-
     </body>
 </html>

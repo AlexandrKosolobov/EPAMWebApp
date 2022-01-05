@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ArrayDeque;
 
+import static by.kosolobov.bshop.sql.MySQLQueryContainer.*;
+
 public class EntityMapper {
     public ArrayDeque<User> mapUser(ResultSet userSet) throws SQLException {
         ArrayDeque<User> users = new ArrayDeque<>();
@@ -38,6 +40,18 @@ public class EntityMapper {
 
         while (serviceSet.next()) {
             services.push(new Service(serviceSet.getInt(1), serviceSet.getString(2)));
+        }
+
+        serviceSet.close();
+        return services;
+    }
+
+    public ArrayDeque<Service> mapServiceFull(ResultSet serviceSet) throws SQLException {
+        ArrayDeque<Service> services = new ArrayDeque<>();
+
+        while (serviceSet.next()) {
+            services.push(new Service(serviceSet.getInt(COLUMN_SERVICE_ID), serviceSet.getString(COLUMN_SERVICE_NAME),
+                    serviceSet.getInt(COLUMN_BARBER_ID), serviceSet.getInt(COLUMN_PRICE)));
         }
 
         serviceSet.close();

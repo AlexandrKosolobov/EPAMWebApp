@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UpdateUser implements SimpleCommand {
-    private static final Logger log = LogManager.getLogger(UpdateUser.class);
+public class UpdateUserCommand implements SimpleCommand {
+    private static final Logger log = LogManager.getLogger(UpdateUserCommand.class);
 
     @Override
     public String execute(HttpServletRequest req) {

@@ -1,5 +1,7 @@
 package by.kosolobov.bshop.entity;
 
+import java.util.StringJoiner;
+
 public class User {
     private final int userId;
     private final String username;
@@ -65,6 +67,53 @@ public class User {
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (userId != user.userId) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (userRole != user.userRole) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (secondName != null ? !secondName.equals(user.secondName) : user.secondName != null) return false;
+        if (surName != null ? !surName.equals(user.surName) : user.surName != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
+        return description != null ? description.equals(user.description) : user.description == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (userRole != null ? userRole.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
+        result = 31 * result + (surName != null ? surName.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+                .add("userId=" + userId)
+                .add("username='" + username + "'")
+                .add("userRole=" + userRole)
+                .add("firstName='" + firstName + "'")
+                .add("secondName='" + secondName + "'")
+                .add("surName='" + surName + "'")
+                .add("email='" + email + "'")
+                .add("phone='" + phone + "'")
+                .add("description='" + description + "'")
+                .toString();
     }
 
     public static class UserBuilder {

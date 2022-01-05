@@ -6,37 +6,28 @@
 </head>
 <body>
 
-<form action='controller'>
+<form action='controller' method="post">
     <label>
-        <input type='text' name='username' placeholder='username'>
+        <input type='text' name='username' placeholder='Username' required>
     </label>
     <br/>
     <label>
-        <input type='text' name='password' placeholder='password'>
+        <input type='text' name='password' placeholder='Password' required>
     </label>
     <br/>
     <label>
-        <input type='text' name='first_name' placeholder='First Name'>
+        <input type='checkbox' name='user_role'>I am Barber
     </label>
     <br/>
     <label>
-        <input type='text' name='second_name' placeholder='Second Name'>
-    </label>
-    <br/>
-    <label>
-        <input type='text' name='sur_name' placeholder='Surname'>
-    </label>
-    <br/>
-    <label>
-        <input type='checkbox' name='is_barber'>I am Barber
-    </label>
-    <br/>
-    <label>
-        <input type='file' name='certificate' placeholder='Certificate' hidden>
+        <input type='file' name='certificate_file' placeholder='Certificate'>
     </label>
     <br/>
     <input type='submit' name='register' value='Register'>
     <br/>
+    <label>
+        <input type="hidden" name="command" value="ADD_USER">
+    </label>
 </form>
 
 </body>

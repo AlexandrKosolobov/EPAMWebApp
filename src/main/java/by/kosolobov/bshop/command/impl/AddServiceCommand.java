@@ -9,11 +9,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 
-import static by.kosolobov.bshop.sql.MySQLQueryContainer.COLUMNS_SERVICE_MIN;
+import static by.kosolobov.bshop.sql.MySQLQueryContainer.COLUMN_SERVICE_NAME;
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.TABLE_SERVICE;
 
-public class AddService implements SimpleCommand {
-    private static final Logger log = LogManager.getLogger(AddService.class);
+public class AddServiceCommand implements SimpleCommand {
+    private static final Logger log = LogManager.getLogger(AddServiceCommand.class);
     private static final String SERVICE_NAME = "service_name";
 
     @Override
@@ -22,7 +22,7 @@ public class AddService implements SimpleCommand {
         String serviceName = String.valueOf(req.getAttribute(SERVICE_NAME));
 
         try {
-            dao.insert(TABLE_SERVICE, COLUMNS_SERVICE_MIN)
+            dao.insert(TABLE_SERVICE, COLUMN_SERVICE_NAME)
                     .values(serviceName)
                     .execute();
         } catch (SQLException e) {

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayDeque;
@@ -16,8 +17,8 @@ import java.util.ArrayDeque;
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.COLUMNS_USER;
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.TABLE_USER;
 
-public class CheckUser implements SimpleCommand {
-    private static final Logger log = LogManager.getLogger(CheckUser.class);
+public class CheckUserCommand implements SimpleCommand {
+    private static final Logger log = LogManager.getLogger(CheckUserCommand.class);
     private static final String USER_ID = "user_id";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -35,14 +36,11 @@ public class CheckUser implements SimpleCommand {
         User user = null;
         String username = req.getParameter(USERNAME);
         String password = req.getParameter(PASSWORD);
-        Map<String, String> columnValue = new HashMap<>();
-
-        columnValue.put(USERNAME, username);
-        columnValue.put(PASSWORD, password);
 
         try {
-            ArrayDeque<User> users = dao.select(TABLE_USER, COLUMNS_USER)
-                    .where(columnValue)
+            Deque<User> users = dao.select(TABLE_USER, COLUMNS_USER)
+                    .where(USERNAME, username)
+                    .andWhere(PASSWORD, password)
                     .executeSql();
 
             if (users.isEmpty()) {

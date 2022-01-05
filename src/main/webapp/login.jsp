@@ -25,7 +25,6 @@
 <form method="post" action="controller">
     <label>
         <input type="hidden" name="command" value="SIGNUP_USER">
-        ${cookie.get("username")}
     </label>
     <input type="submit" value="Sign up">
 </form>
