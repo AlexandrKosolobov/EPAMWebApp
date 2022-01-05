@@ -4,7 +4,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -13,15 +12,15 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger log = LogManager.getLogger(ConnectionPool.class);
     private static final int DEFAULT_POOL_SIZE = 8;
-    private static final BlockingQueue<Connection> FREE_POOL = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
-    private static final BlockingQueue<Connection> USE_POOL = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
+    private static final BlockingQueue<ProxyConnection> FREE_POOL = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
+    private static final BlockingQueue<ProxyConnection> USE_POOL = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
     private static ConnectionPool instance = new ConnectionPool();
     private static final ReentrantLock locker = new ReentrantLock();
 
     private ConnectionPool() {
         try {
             for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-                    FREE_POOL.put(SQLConnector.getConnection());
+                    FREE_POOL.put(new ProxyConnection());
             }
             log.log(Level.INFO, "Connection pool initialization successful");
         } catch (SQLException e) {
@@ -46,8 +45,8 @@ public class ConnectionPool {
         return instance;
     }
 
-    public Connection getConnection() {
-        Connection connection = null;
+    public ProxyConnection getConnection() {
+        ProxyConnection connection = null;
         try {
             connection = FREE_POOL.take();
             USE_POOL.put(connection);
@@ -57,7 +56,7 @@ public class ConnectionPool {
         return connection;
     }
 
-    public void releaseConnection(Connection connection) {
+    public void releaseConnection(ProxyConnection connection) {
         try {
             FREE_POOL.put(connection);
             if (!USE_POOL.remove(connection)) {
@@ -70,13 +69,13 @@ public class ConnectionPool {
 
     public void destroy() {
         try {
-            for (Connection c : FREE_POOL) {
-                c.close();
+            for (ProxyConnection c : FREE_POOL) {
+                c.reallyClose();
             }
             FREE_POOL.clear();
 
-            for (Connection c : USE_POOL) {
-                c.close();
+            for (ProxyConnection c : USE_POOL) {
+                c.reallyClose();
             }
             USE_POOL.clear();
 

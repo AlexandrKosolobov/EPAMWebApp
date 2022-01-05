@@ -175,4 +175,9 @@ public class User {
                             description);
         }
     }
+
+    public enum Role {
+        CLIENT,
+        BARBER
+    }
 }

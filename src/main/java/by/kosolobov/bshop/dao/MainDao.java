@@ -1,6 +1,7 @@
 package by.kosolobov.bshop.dao;
 
 import by.kosolobov.bshop.connector.ConnectionPool;
+import by.kosolobov.bshop.connector.ProxyConnection;
 import by.kosolobov.bshop.entity.Book;
 import by.kosolobov.bshop.entity.Service;
 import by.kosolobov.bshop.entity.User;
@@ -9,7 +10,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,15 +21,13 @@ public enum MainDao {
 
         public Deque<User> executeSql() throws SQLException {
             builder.append(";");
-            Connection connection = ConnectionPool.getInstance().getConnection();
+            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
             ArrayDeque<User> users = null;
 
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(builder.toString());
                 users = ENTITY_MAPPER.mapUser(resultSet);
-            } finally {
-                ConnectionPool.getInstance().releaseConnection(connection);
             }
 
             log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
@@ -42,15 +40,13 @@ public enum MainDao {
 
         public Deque<Service> executeSql() throws SQLException {
             builder.append(";");
-            Connection connection = ConnectionPool.getInstance().getConnection();
+            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
             ArrayDeque<Service> services = null;
 
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(builder.toString());
                 services = ENTITY_MAPPER.mapService(resultSet);
-            } finally {
-                ConnectionPool.getInstance().releaseConnection(connection);
             }
 
             log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
@@ -63,15 +59,13 @@ public enum MainDao {
 
         public Deque<Book> executeSql() throws SQLException {
             builder.append(";");
-            Connection connection = ConnectionPool.getInstance().getConnection();
+            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
             ArrayDeque<Book> books = null;
 
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(builder.toString());
                 books = ENTITY_MAPPER.mapBook(resultSet);
-            } finally {
-                ConnectionPool.getInstance().releaseConnection(connection);
             }
 
             log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
@@ -84,15 +78,13 @@ public enum MainDao {
 
         public Deque<Service> executeSql() throws SQLException {
             builder.append(";");
-            Connection connection = ConnectionPool.getInstance().getConnection();
+            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             ResultSet resultSet = null;
             ArrayDeque<Service> services = null;
 
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(builder.toString());
                 services = ENTITY_MAPPER.mapServiceFull(resultSet);
-            } finally {
-                ConnectionPool.getInstance().releaseConnection(connection);
             }
 
             log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
@@ -205,7 +197,7 @@ public enum MainDao {
 
     public boolean execute() throws SQLException {
         builder.append(";");
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ProxyConnection connection = ConnectionPool.getInstance().getConnection();
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(builder.toString());
@@ -223,7 +215,7 @@ public enum MainDao {
 
     public ResultSet rowExecuteSql() throws SQLException {
         builder.append(";");
-        Connection connection = ConnectionPool.getInstance().getConnection();
+        ProxyConnection connection = ConnectionPool.getInstance().getConnection();
         ResultSet resultSet = null;
         ArrayDeque<Book> books = null;
 

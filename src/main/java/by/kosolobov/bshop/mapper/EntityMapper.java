@@ -1,7 +1,6 @@
 package by.kosolobov.bshop.mapper;
 
 import by.kosolobov.bshop.entity.Book;
-import by.kosolobov.bshop.entity.Role;
 import by.kosolobov.bshop.entity.Service;
 import by.kosolobov.bshop.entity.User;
 
@@ -20,7 +19,7 @@ public class EntityMapper {
         while (userSet.next()) {
             builder.setUserId(userSet.getInt(1));
             builder.setUsername(userSet.getString(2));
-            builder.setUserRole(Role.valueOf(userSet.getString(4).toUpperCase(Locale.ROOT)));
+            builder.setUserRole(User.Role.valueOf(userSet.getString(4).toUpperCase(Locale.ROOT)));
             builder.setFirstName(userSet.getString(5));
             builder.setSecondName(userSet.getString(6));
             builder.setSurName(userSet.getString(7));
