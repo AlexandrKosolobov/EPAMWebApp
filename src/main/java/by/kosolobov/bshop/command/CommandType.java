@@ -1,18 +1,19 @@
 package by.kosolobov.bshop.command;
 
-import by.kosolobov.bshop.command.impl.AddUserCommand;
-import by.kosolobov.bshop.command.impl.CheckUserCommand;
-import by.kosolobov.bshop.command.impl.DeleteUserCommand;
+import by.kosolobov.bshop.command.impl.*;
 
 public enum CommandType {
     CHECK_USER(new CheckUserCommand()),
     ADD_USER(new AddUserCommand()),
     DELETE_USER(new DeleteUserCommand()),
+    SHOW_CLIENT_BOOK(new ShowClientBooksCommand()),
+    ILLEGAL_NAME(new IllegalNameCommand()),
+    LOGIN(new LoginCommand())
     ;
 
-    private SimpleCommand command;
+    private final SimpleCommand command;
 
-    private CommandType(SimpleCommand command) {
+    CommandType(SimpleCommand command) {
         this.command = command;
     }
 

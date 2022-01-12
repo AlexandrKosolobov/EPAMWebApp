@@ -1,18 +1,14 @@
-package by.kosolobov.bshop.command.service;
+package by.kosolobov.bshop.service;
 
 import by.kosolobov.bshop.dao.MainDao;
 import by.kosolobov.bshop.entity.Service;
-import by.kosolobov.bshop.entity.User;
-import by.kosolobov.bshop.mapper.EntityMapper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Map;
 
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.*;
 

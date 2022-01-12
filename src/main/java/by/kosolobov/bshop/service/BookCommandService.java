@@ -1,4 +1,4 @@
-package by.kosolobov.bshop.command.service;
+package by.kosolobov.bshop.service;
 
 import by.kosolobov.bshop.dao.MainDao;
 import by.kosolobov.bshop.entity.Book;
@@ -67,69 +67,39 @@ public class BookCommandService {
     }
 
     public boolean updateBookDateTime(Date oldDate, Time oldTime, Date newDate, Time newTime) {
-        try {
-            dao.update(TABLE_BOOK)
-                    .set(COLUMN_BOOK_DATE, newDate.toString())
-                    .andSet(COLUMN_BOOK_TIME, newTime.toString())
-                    .where(COLUMN_BOOK_DATE, oldDate.toString())
-                    .andWhere(COLUMN_BOOK_TIME, oldTime.toString())
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "UPDATE: Book does not exist: {}", e.getMessage(), e);
-            return false;
-        }
-        return true;
+        return dao.update(TABLE_BOOK)
+                .set(COLUMN_BOOK_DATE, newDate.toString())
+                .andSet(COLUMN_BOOK_TIME, newTime.toString())
+                .where(COLUMN_BOOK_DATE, oldDate.toString())
+                .andWhere(COLUMN_BOOK_TIME, oldTime.toString())
+                .execute();
     }
 
     public boolean updateBookStatus(Date date, Time time, boolean active) {
-        try {
-            dao.update(TABLE_BOOK)
-                    .set(COLUMN_BOOK_ACTIVE, String.valueOf(active))
-                    .where(COLUMN_BOOK_DATE, date.toString())
-                    .andWhere(COLUMN_BOOK_TIME, time.toString())
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "UPDATE: Book does not exist: {}", e.getMessage(), e);
-            return false;
-        }
-        return true;
+        return dao.update(TABLE_BOOK)
+                .set(COLUMN_BOOK_ACTIVE, String.valueOf(active))
+                .where(COLUMN_BOOK_DATE, date.toString())
+                .andWhere(COLUMN_BOOK_TIME, time.toString())
+                .execute();
     }
 
     public boolean insertBook(int client, int barber, int service, Date date, Time time) {
-        try {
-            dao.insert(TABLE_BOOK, COLUMNS_BOOK)
-                    .values(String.valueOf(client), String.valueOf(barber),
-                            String.valueOf(service), date.toString(), time.toString(), "true")
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "INSERT: Book is already exist: {}", e.getMessage(), e);
-            return false;
-        }
-        return true;
+        return dao.insert(TABLE_BOOK, COLUMNS_BOOK)
+                .values(String.valueOf(client), String.valueOf(barber),
+                        String.valueOf(service), date.toString(), time.toString(), "true")
+                .execute();
     }
 
     public boolean deleteBook(Date date, Time time) {
-        try {
-            dao.delete(TABLE_BOOK)
-                    .where(COLUMN_BOOK_DATE, date.toString())
-                    .andWhere(COLUMN_BOOK_TIME, time.toString())
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "DELETE: Book does not exist: {}", e.getMessage(), e);
-            return false;
-        }
-        return true;
+        return dao.delete(TABLE_BOOK)
+                .where(COLUMN_BOOK_DATE, date.toString())
+                .andWhere(COLUMN_BOOK_TIME, time.toString())
+                .execute();
     }
 
     public boolean deleteAllInactive() {
-        try {
-            dao.delete(TABLE_BOOK)
-                    .where(COLUMN_BOOK_ACTIVE, "false")
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "DELETE: Books does not exist");
-            return false;
-        }
-        return true;
+        return dao.delete(TABLE_BOOK)
+                .where(COLUMN_BOOK_ACTIVE, "false")
+                .execute();
     }
 }

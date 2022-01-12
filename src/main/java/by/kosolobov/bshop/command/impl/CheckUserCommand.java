@@ -3,16 +3,18 @@ package by.kosolobov.bshop.command.impl;
 import by.kosolobov.bshop.command.SimpleCommand;
 import by.kosolobov.bshop.dao.MainDao;
 import by.kosolobov.bshop.entity.User;
+import by.kosolobov.bshop.mapper.CookieMapper;
+import by.kosolobov.bshop.mapper.UserPasswordPair;
+import by.kosolobov.bshop.service.UserCommandService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ArrayDeque;
 
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.COLUMNS_USER;
 import static by.kosolobov.bshop.sql.MySQLQueryContainer.TABLE_USER;
@@ -31,7 +33,7 @@ public class CheckUserCommand implements SimpleCommand {
     private static final String DESCRIPTION = "user_desc";
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         MainDao dao = MainDao.USER_DAO;
         User user = null;
         String username = req.getParameter(USERNAME);
@@ -53,15 +55,28 @@ public class CheckUserCommand implements SimpleCommand {
         }
 
         assert user != null;
-        req.setAttribute(USER_ID, user.getUserId());
-        req.setAttribute(USERNAME, user.getUsername());
-        req.setAttribute(ROLE, user.getUserRole());
-        req.setAttribute(FIRST_NAME, user.getFirstName());
-        req.setAttribute(SECOND_NAME, user.getSecondName());
-        req.setAttribute(SUR_NAME, user.getSurName());
-        req.setAttribute(USER_EMAIL, user.getEmail());
-        req.setAttribute(USER_PHONE, user.getPhone());
-        req.setAttribute(DESCRIPTION, user.getDescription());
+        req.getSession().setAttribute(USER_ID, user.getUserId());
+        req.getSession().setAttribute(USERNAME, user.getUsername());
+        req.getSession().setAttribute(ROLE, user.getUserRole());
+        req.getSession().setAttribute(FIRST_NAME, user.getFirstName());
+        req.getSession().setAttribute(SECOND_NAME, user.getSecondName());
+        req.getSession().setAttribute(SUR_NAME, user.getSurName());
+        req.getSession().setAttribute(USER_EMAIL, user.getEmail());
+        req.getSession().setAttribute(USER_PHONE, user.getPhone());
+        req.getSession().setAttribute(DESCRIPTION, user.getDescription());
+
+        if (req.getParameter("remember") != null) {
+            resp.addCookie(new Cookie(USER_ID, String.valueOf(user.getUserId())));
+            resp.addCookie(new Cookie(USERNAME, user.getUsername()));
+            resp.addCookie(new Cookie(PASSWORD, password));
+            resp.addCookie(new Cookie(ROLE, String.valueOf(user.getUserRole())));
+            resp.addCookie(new Cookie(FIRST_NAME, user.getFirstName()));
+            resp.addCookie(new Cookie(SECOND_NAME, user.getSecondName()));
+            resp.addCookie(new Cookie(SUR_NAME, user.getSurName()));
+            resp.addCookie(new Cookie(USER_EMAIL, user.getEmail()));
+            resp.addCookie(new Cookie(USER_PHONE, user.getPhone()));
+            resp.addCookie(new Cookie(DESCRIPTION, user.getDescription()));
+        }
 
         return "person.jsp";
     }

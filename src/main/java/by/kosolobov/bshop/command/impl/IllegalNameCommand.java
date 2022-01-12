@@ -3,15 +3,11 @@ package by.kosolobov.bshop.command.impl;
 import by.kosolobov.bshop.command.SimpleCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class DeleteUserCommand implements SimpleCommand {
-    private static final Logger log = LogManager.getLogger(DeleteUserCommand.class);
-
-
+public class IllegalNameCommand implements SimpleCommand {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return null;
+        req.setAttribute("error", "Illegal command name!");
+        return "index.jsp";
     }
 }

@@ -6,32 +6,69 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE>
 <html lang="en">
 <head>
     <title>Personal Area</title>
 </head>
 <body>
-
-<form action="controller">
-    Username: ${requestScope.get("username")}
+<form action="controller" method="post">
+    User ID: ${sessionScope.user_id}
     <br/>
-    Status: ${requestScope.get("user_role")}
+    Username: ${sessionScope.username}
     <br/>
-    First name: ${requestScope.get("first_name")}
+    Status: ${sessionScope.user_role}
     <br/>
-    Second name: ${requestScope.get("second_name")}
+    First name: ${sessionScope.first_name}
     <br/>
-    Surname: ${requestScope.get("sur_name")}
+    Second name: ${sessionScope.second_name}
     <br/>
-    Email: ${requestScope.get("user_email")}
+    Surname: ${sessionScope.sur_name}
     <br/>
-    Phone: ${requestScope.get("user_phone")}
+    Email: ${sessionScope.user_email}
     <br/>
-    Description: ${requestScope.get("user_desc")}
+    Phone: ${sessionScope.user_phone}
+    <br/>
+    Description: ${sessionScope.user_desc}
     <br/>
     <input type='submit' value='Booking'>
+    <input type="text" name="command" value="SHOW_CLIENT_BOOK" hidden>
 </form>
-
+<form action="controller" method="post">
+    <input type="submit" value="Add book">
+    <input type="text" name="command" value="ADD_BOOK" hidden>
+</form>
+<c:if test="${requestScope.items != null}">
+<table>
+    <thead>
+    <tr>
+        <th>Client ID</th>
+        <th>Barber ID</th>
+        <th>Service ID</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${requestScope.items}" var="item">
+        <tr>
+            <td>${item.clientId}</td>
+            <td>${item.barberId}</td>
+            <td>${item.serviceId}</td>
+            <td>${item.bookDate}</td>
+            <td>${item.bookTime}</td>
+            <td>${item.active}</td>
+        </tr>
+    </c:forEach>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="6">Total books: ${requestScope.items.size()}</td>
+    </tr>
+    </tfoot>
+</table>
+</c:if>
 </body>
 </html>

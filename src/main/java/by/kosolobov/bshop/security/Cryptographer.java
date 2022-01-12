@@ -23,12 +23,12 @@ public class Cryptographer {
     }
 
     public static String encrypt(String toEnc, int id) {
-        //todo
+        //todo: make encrypting method
         return null;
     }
 
     public static String decrypt(String toDec, int id) {
-        //todo
+        //todo: make decrypting method
         return null;
     }
 }

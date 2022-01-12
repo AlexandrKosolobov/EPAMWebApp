@@ -1,4 +1,4 @@
-package by.kosolobov.bshop.command.service;
+package by.kosolobov.bshop.service;
 
 import by.kosolobov.bshop.dao.MainDao;
 import by.kosolobov.bshop.entity.Service;
@@ -35,40 +35,21 @@ public class ServiceCommandService {
     }
 
     public boolean updateService(String oldName, String newName) {
-        try {
-            dao.update(TABLE_SERVICE)
-                    .set(COLUMN_SERVICE_NAME, newName)
-                    .where(COLUMN_SERVICE_NAME, oldName)
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "UPDATE: Service does not exist: {}", e.getMessage(), e);
-            return false;
-        }
-        return true;
+        return dao.update(TABLE_SERVICE)
+                .set(COLUMN_SERVICE_NAME, newName)
+                .where(COLUMN_SERVICE_NAME, oldName)
+                .execute();
     }
 
     public boolean insertService(String name) {
-        try {
-            dao.insert(TABLE_SERVICE, COLUMN_SERVICE_NAME)
-                    .values(name)
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "INSERT: Service is already exist: {}", e.getMessage(), e);
-            return false;
-        }
-
-        return true;
+        return dao.insert(TABLE_SERVICE, COLUMN_SERVICE_NAME)
+                .values(name)
+                .execute();
     }
 
     public boolean deleteService(String name) {
-        try {
-            dao.delete(TABLE_SERVICE)
-                    .where(COLUMN_SERVICE_NAME, name)
-                    .execute();
-        } catch (SQLException e) {
-            log.log(Level.WARN, "DELETE: Service does not exist: {}", e.getMessage(), e);
-            return false;
-        }
-        return true;
+        return dao.delete(TABLE_SERVICE)
+                .where(COLUMN_SERVICE_NAME, name)
+                .execute();
     }
 }

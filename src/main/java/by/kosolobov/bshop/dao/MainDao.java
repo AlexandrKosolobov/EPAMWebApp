@@ -13,81 +13,72 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
 public enum MainDao {
     USER_DAO {
-
         public Deque<User> executeSql() throws SQLException {
             builder.append(";");
-            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            ResultSet resultSet = null;
             ArrayDeque<User> users = null;
+            log.log(Level.INFO, "USER_DAO: Executing SQL:\n    {}", builder);
 
-            try (Statement statement = connection.createStatement()) {
-                resultSet = statement.executeQuery(builder.toString());
+            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+                 Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(builder.toString())) {
                 users = ENTITY_MAPPER.mapUser(resultSet);
             }
 
-            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
             builder.delete(0, builder.length());
             return users;
         }
 
     },
     SERVICE_DAO {
-
         public Deque<Service> executeSql() throws SQLException {
             builder.append(";");
-            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            ResultSet resultSet = null;
             ArrayDeque<Service> services = null;
+            log.log(Level.INFO, "SERVICE_DAO: Executing SQL:\n    {}", builder);
 
-            try (Statement statement = connection.createStatement()) {
-                resultSet = statement.executeQuery(builder.toString());
+            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+                 Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(builder.toString())) {
                 services = ENTITY_MAPPER.mapService(resultSet);
             }
 
-            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
             builder.delete(0, builder.length());
             return services;
         }
 
     },
     BOOK_DAO {
-
         public Deque<Book> executeSql() throws SQLException {
             builder.append(";");
-            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            ResultSet resultSet = null;
             ArrayDeque<Book> books = null;
+            log.log(Level.INFO, "BOOK_DAO: Executing SQL:\n    {}", builder);
 
-            try (Statement statement = connection.createStatement()) {
-                resultSet = statement.executeQuery(builder.toString());
+            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+                 Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(builder.toString())) {
                 books = ENTITY_MAPPER.mapBook(resultSet);
             }
 
-            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
             builder.delete(0, builder.length());
             return books;
         }
 
     },
     SERVICE_DAO_FULL {
-
         public Deque<Service> executeSql() throws SQLException {
             builder.append(";");
-            ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            ResultSet resultSet = null;
             ArrayDeque<Service> services = null;
+            log.log(Level.INFO, "SERVICE_DAO_FULL: Executing SQL:\n    {}", builder);
 
-            try (Statement statement = connection.createStatement()) {
-                resultSet = statement.executeQuery(builder.toString());
+            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+                 Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(builder.toString())) {
                 services = ENTITY_MAPPER.mapServiceFull(resultSet);
             }
 
-            log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
             builder.delete(0, builder.length());
             return services;
         }
@@ -195,38 +186,46 @@ public enum MainDao {
         return this;
     }
 
-    public boolean execute() throws SQLException {
+    public boolean execute() {
         builder.append(";");
-        ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+        log.log(Level.INFO, "Executing:\n    {}", builder);
 
-        try (Statement statement = connection.createStatement()) {
+        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement()) {
             statement.execute(builder.toString());
         } catch (SQLException e) {
-            log.log(Level.ERROR, "Executing:\n    {} error: {}", builder, e.getMessage(), e);
+            log.log(Level.ERROR, "EXECUTE ERROR: {}", e.getMessage(), e);
             return false;
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(connection);
         }
 
-        log.log(Level.INFO, "Executing:\n    {} success", builder);
         builder.delete(0, builder.length());
         return true;
     }
 
-    public ResultSet rowExecuteSql() throws SQLException {
+    public Optional<List<Map<String, String>>> executeRow(String... columns) {
         builder.append(";");
-        ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-        ResultSet resultSet = null;
-        ArrayDeque<Book> books = null;
+        Map<String, String> map = new HashMap<>();
+        List<Map<String, String>> result = new ArrayList<>();
+        log.log(Level.INFO, "Executing:\n    {}", builder);
 
-        try (Statement statement = connection.createStatement()) {
-            resultSet = statement.executeQuery(builder.toString());
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(connection);
+        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(builder.toString())) {
+
+            while (resultSet.next()) {
+                for (int i = 0; i < columns.length; i++) {
+                    map.put(columns[i], resultSet.getString(i + 1));
+                }
+                result.add(map);
+            }
+
+            builder.delete(0, builder.length());
+            return Optional.of(result);
+        } catch (SQLException e) {
+            log.log(Level.ERROR, "EXECUTE ERROR: {}", e.getMessage(), e);
         }
 
-        log.log(Level.INFO, "Executing SQL:\n    {} success", builder);
         builder.delete(0, builder.length());
-        return resultSet;
+        return Optional.empty();
     }
 }

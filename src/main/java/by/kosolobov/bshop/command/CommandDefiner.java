@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class CommandDefiner {
     private static final Logger log = LogManager.getLogger(CommandDefiner.class);
-    private static final String DEFAULT_ERROR_COMMAND = "MAIN_MENU";
+    private static final String DEFAULT_ERROR_COMMAND = "ILLEGAL_NAME";
 
     public static SimpleCommand define(String strCommand) {
         CommandType type;

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-@WebServlet(name = "MainController",urlPatterns = "/controller")
+@WebServlet(name = "MainController", urlPatterns = "/controller")
 public class MainController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(MainController.class);
     private static final String COMMAND = "command";
@@ -33,7 +33,7 @@ public class MainController extends HttpServlet {
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String strCommand = req.getParameter(COMMAND);
         SimpleCommand command = CommandDefiner.define(strCommand);
-        String path = command.execute(req);
+        String path = command.execute(req, resp);
 
         if (path != null) {
             RequestDispatcher dispatcher = req.getRequestDispatcher(path);

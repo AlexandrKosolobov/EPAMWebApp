@@ -1,0 +1,19 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>pages</short-name>
+    <uri>/WEB-INF/tags/implicit.tld</uri>
+
+    <tag>
+        <name>Pagination</name>
+        <tag-class>by.kosolobov.bshop.tag.PaginationTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <name>items</name>
+            <type>java.util.Deque</type>
+            <required>true</required>
+        </attribute>
+
+    </tag>
+</taglib>

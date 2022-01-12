@@ -1,11 +1,9 @@
-package by.kosolobov.bshop.command.service;
+package by.kosolobov.bshop.service;
 
 import by.kosolobov.bshop.entity.Service;
 import org.junit.jupiter.api.Test;
 
 import java.util.Deque;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ViewCommandServiceTest {
 
