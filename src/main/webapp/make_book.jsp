@@ -1,5 +1,5 @@
-<%@ page import="by.kosolobov.bshop.service.UserCommandService" %>
-<%@ page import="by.kosolobov.bshop.entity.User" %>
+<%@ page import="by.kosolobov.barbershop.data.dao.UserDao" %>
+<%@ page import="by.kosolobov.barbershop.entity.User" %>
 <%@ page import="java.util.Deque" %><%--
   Created by IntelliJ IDEA.
   User: sasha
@@ -26,7 +26,7 @@
         </thead>
         <tbody>
         <%
-            UserCommandService ucs = new UserCommandService();
+            UserDao ucs = new UserDao();
             Deque<User> barbers = ucs.selectAllBarbers();
             for (User barber : barbers) {
                 %>

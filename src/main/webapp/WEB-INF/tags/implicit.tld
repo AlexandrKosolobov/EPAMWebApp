@@ -6,7 +6,7 @@
 
     <tag>
         <name>Pagination</name>
-        <tag-class>by.kosolobov.bshop.tag.PaginationTag</tag-class>
+        <tag-class>by.kosolobov.barbershop.base.tag.PaginationTag</tag-class>
         <body-content>empty</body-content>
 
         <attribute>
