@@ -1,7 +1,6 @@
 package by.kosolobov.barbershop.data.dao;
 
 import by.kosolobov.barbershop.data.ConnectionPool;
-import by.kosolobov.barbershop.data.ProxyConnection;
 import by.kosolobov.barbershop.entity.Book;
 import by.kosolobov.barbershop.entity.Service;
 import by.kosolobov.barbershop.entity.User;
@@ -10,6 +9,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,15 +17,15 @@ import java.util.*;
 
 public enum DaoBuilder {
     USER_DAO {
-        public Deque<User> executeSql() throws SQLException {
+        public List<User> executeSql() throws SQLException {
             builder.append(";");
-            ArrayDeque<User> users = null;
+            List<User> users = null;
             log.log(Level.INFO, "USER_DAO: Executing SQL:\n    {}", builder);
 
-            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            try (Connection connection = ConnectionPool.getInstance().getConnection();
                  Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(builder.toString())) {
-                users = ENTITY_MAPPER.mapUser(resultSet);
+                 users = ENTITY_MAPPER.mapUser(resultSet);
             }
 
             builder.delete(0, builder.length());
@@ -34,15 +34,15 @@ public enum DaoBuilder {
 
     },
     SERVICE_DAO {
-        public Deque<Service> executeSql() throws SQLException {
+        public List<Service> executeSql() throws SQLException {
             builder.append(";");
-            ArrayDeque<Service> services = null;
+            List<Service> services = null;
             log.log(Level.INFO, "SERVICE_DAO: Executing SQL:\n    {}", builder);
 
-            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            try (Connection connection = ConnectionPool.getInstance().getConnection();
                  Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(builder.toString())) {
-                services = ENTITY_MAPPER.mapService(resultSet);
+                 services = ENTITY_MAPPER.mapService(resultSet);
             }
 
             builder.delete(0, builder.length());
@@ -51,15 +51,15 @@ public enum DaoBuilder {
 
     },
     BOOK_DAO {
-        public Deque<Book> executeSql() throws SQLException {
+        public List<Book> executeSql() throws SQLException {
             builder.append(";");
-            ArrayDeque<Book> books = null;
+            List<Book> books = null;
             log.log(Level.INFO, "BOOK_DAO: Executing SQL:\n    {}", builder);
 
-            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            try (Connection connection = ConnectionPool.getInstance().getConnection();
                  Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(builder.toString())) {
-                books = ENTITY_MAPPER.mapBook(resultSet);
+                 books = ENTITY_MAPPER.mapBook(resultSet);
             }
 
             builder.delete(0, builder.length());
@@ -68,15 +68,15 @@ public enum DaoBuilder {
 
     },
     SERVICE_DAO_FULL {
-        public Deque<Service> executeSql() throws SQLException {
+        public List<Service> executeSql() throws SQLException {
             builder.append(";");
-            ArrayDeque<Service> services = null;
+            List<Service> services = null;
             log.log(Level.INFO, "SERVICE_DAO_FULL: Executing SQL:\n    {}", builder);
 
-            try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            try (Connection connection = ConnectionPool.getInstance().getConnection();
                  Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(builder.toString())) {
-                services = ENTITY_MAPPER.mapServiceFull(resultSet);
+                 services = ENTITY_MAPPER.mapServiceFull(resultSet);
             }
 
             builder.delete(0, builder.length());
@@ -87,7 +87,7 @@ public enum DaoBuilder {
     private static final EntityMapper ENTITY_MAPPER = new EntityMapper();
     final StringBuilder builder = new StringBuilder();
 
-    public abstract <E> Deque<E> executeSql() throws SQLException;
+    public abstract <E> List<E> executeSql() throws SQLException;
 
     public DaoBuilder select(String table, String... columns) {
         builder.append("SELECT");
@@ -190,7 +190,7 @@ public enum DaoBuilder {
         builder.append(";");
         log.log(Level.INFO, "Executing:\n    {}", builder);
 
-        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(builder.toString());
         } catch (SQLException e) {
@@ -208,7 +208,7 @@ public enum DaoBuilder {
         List<Map<String, String>> result = new ArrayList<>();
         log.log(Level.INFO, "Executing:\n    {}", builder);
 
-        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(builder.toString())) {
 

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -12,15 +13,15 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger log = LogManager.getLogger(ConnectionPool.class);
     private static final int DEFAULT_POOL_SIZE = 8;
-    private static final BlockingQueue<ProxyConnection> FREE_POOL = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
-    private static final BlockingQueue<ProxyConnection> USE_POOL = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
-    private static ConnectionPool instance = new ConnectionPool();
+    private final BlockingQueue<ProxyConnection> freePool = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
+    private final BlockingQueue<ProxyConnection> busyPool = new ArrayBlockingQueue<>(DEFAULT_POOL_SIZE);
+    private static ConnectionPool instance;
     private static final ReentrantLock locker = new ReentrantLock();
 
     private ConnectionPool() {
         try {
             for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-                    FREE_POOL.put(new ProxyConnection());
+                    freePool.put(new ProxyConnection());
             }
             log.log(Level.INFO, "Connection pool initialization successful");
         } catch (SQLException e) {
@@ -45,21 +46,21 @@ public class ConnectionPool {
         return instance;
     }
 
-    public ProxyConnection getConnection() {
+    public Connection getConnection() {
         ProxyConnection connection = null;
         try {
-            connection = FREE_POOL.take();
-            USE_POOL.put(connection);
+            connection = freePool.take();
+            busyPool.put(connection);
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Getting connection from connection pool interrupted: {}", e.getMessage(), e);
         }
         return connection;
     }
 
-    public void releaseConnection(ProxyConnection connection) {
+    public void releaseConnection(Connection connection) {
         try {
-            FREE_POOL.put(connection);
-            if (!USE_POOL.remove(connection)) {
+            freePool.put(new ProxyConnection(connection));
+            if (!busyPool.remove(connection)) {
                 log.log(Level.WARN, "Illegal operation! Can not release connection that is not in use!");
             }
         } catch (InterruptedException e) {
@@ -69,15 +70,15 @@ public class ConnectionPool {
 
     public void destroy() {
         try {
-            for (ProxyConnection c : FREE_POOL) {
+            for (ProxyConnection c : freePool) {
                 c.reallyClose();
             }
-            FREE_POOL.clear();
+            freePool.clear();
 
-            for (ProxyConnection c : USE_POOL) {
+            for (ProxyConnection c : busyPool) {
                 c.reallyClose();
             }
-            USE_POOL.clear();
+            busyPool.clear();
 
             log.log(Level.INFO, "Destroying connection pool successful");
         } catch (SQLException e) {

@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class SQLConnector {
+class SQLConnector {
     private static final Logger log = LogManager.getLogger(SQLConnector.class);
     private static final SQLPropertyReader reader = new SQLPropertyReader();
     private static final String PROP_DRIVER = "db.driver";

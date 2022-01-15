@@ -14,7 +14,7 @@ import static by.kosolobov.barbershop.data.sql.SQLContainer.*;
 public class UtilDao {
     private static final Logger log = LogManager.getLogger(UtilDao.class);
 
-    public Deque<Service> getBarberServices(int barberId) {
+    public Deque<Service> selectBarberServices(int barberId) {
         DaoBuilder dao = DaoBuilder.SERVICE_DAO_FULL;
 
         try {

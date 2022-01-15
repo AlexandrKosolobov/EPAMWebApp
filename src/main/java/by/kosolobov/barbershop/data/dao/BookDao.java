@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 import static by.kosolobov.barbershop.data.sql.SQLContainer.*;
 
@@ -18,20 +19,20 @@ public class BookDao {
     private static final Logger log = LogManager.getLogger(BookDao.class);
     private final DaoBuilder dao = DaoBuilder.BOOK_DAO;
 
-    public Deque<Book> selectBookByClientId(String id) {
+    public List<Book> selectBookByClientId(String id) {
         return selectBookByUserId(COLUMN_CLIENT_ID, id);
     }
 
-    public Deque<Book> selectBookByBarberId(String id) {
+    public List<Book> selectBookByBarberId(String id) {
         return selectBookByUserId(SQLContainer.COLUMN_BARBER_ID, id);
     }
 
-    public Deque<Book> selectBookByServiceId(String id) {
+    public List<Book> selectBookByServiceId(String id) {
         return selectBookByUserId(SQLContainer.COLUMN_SERVICE_ID, id);
     }
 
 
-    public Deque<Book> selectBookByUserId(String column, String id) {
+    public List<Book> selectBookByUserId(String column, String id) {
         try {
             return dao.select(TABLE_BOOK, COLUMNS_BOOK)
                     .where(column, id)
@@ -42,7 +43,7 @@ public class BookDao {
         return new ArrayDeque<>();
     }
 
-    public Deque<Book> selectBookByDate(Date date) {
+    public List<Book> selectBookByDate(Date date) {
         try {
             return dao.select(TABLE_BOOK, COLUMNS_BOOK)
                     .where(COLUMN_BOOK_DATE, date.toString())
@@ -53,7 +54,7 @@ public class BookDao {
         return new ArrayDeque<>();
     }
 
-    public Deque<Book> selectBookByDateTime(Time time) {
+    public List<Book> selectBookByTime(Time time) {
         try {
             return dao.select(TABLE_BOOK, COLUMNS_BOOK)
                     .where(COLUMN_BOOK_TIME, time.toString())

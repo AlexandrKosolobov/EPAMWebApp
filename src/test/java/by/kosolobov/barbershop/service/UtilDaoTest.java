@@ -12,7 +12,7 @@ class UtilDaoTest {
     void getBarberServices() {
         UtilDao service = new UtilDao();
 
-        Deque<Service> services = service.getBarberServices(2);
+        Deque<Service> services = service.selectBarberServices(2);
 
         for (Service s : services) {
             System.out.println(s);

@@ -15,7 +15,7 @@ public class UserDao {
     private static final String BARBER_ROLE = "barber";
     private final DaoBuilder dao = DaoBuilder.USER_DAO;
 
-    public Deque<User> selectAllBarbers() {
+    public List<User> selectAllBarbers() {
         try {
             return dao.select(TABLE_USER)
                     .where(COLUMN_USER_ROLE, BARBER_ROLE)
@@ -23,18 +23,19 @@ public class UserDao {
         } catch (SQLException e) {
             log.log(Level.ERROR, "SELECT: User does not exist: {}", e.getMessage(), e);
         }
-        return new ArrayDeque<>();
+        return new ArrayList<>();
     }
 
     public Optional<User> selectUserByUsername(String username) {
-        Optional<User> res;
         try {
             return Optional.of( (User) dao.select(TABLE_USER, COLUMNS_USER)
                     .where(COLUMN_USERNAME, username)
                     .executeSql()
-                    .pop());
+                    .get(0));
         } catch (SQLException e) {
             log.log(Level.WARN, "SELECT: User does not exist: {}", e.getMessage(), e);
+        } catch (IndexOutOfBoundsException e) {
+            log.log(Level.ERROR, "SELECT: User does not exist: {}", e.getMessage(), e);
         }
 
         return Optional.empty();

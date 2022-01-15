@@ -5,11 +5,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class ProxyConnection implements Connection {
+class ProxyConnection implements Connection {
     private final Connection connection;
 
     public ProxyConnection() throws SQLException {
         connection = SQLConnector.getConnection();
+    }
+
+    public ProxyConnection(Connection connection) {
+        this.connection = connection;
     }
 
     @Override

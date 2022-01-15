@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.List;
 
 import static by.kosolobov.barbershop.data.sql.SQLContainer.*;
 
@@ -15,15 +15,15 @@ public class ServiceDao {
     private static final Logger log = LogManager.getLogger(ServiceDao.class);
     private final DaoBuilder dao = DaoBuilder.SERVICE_DAO;
 
-    public Deque<Service> selectServiceByName(String name) {
+    public List<Service> selectServiceByName(String name) {
         return selectService(COLUMN_SERVICE_NAME, name);
     }
 
-    public Deque<Service> selectServiceById(String id) {
+    public List<Service> selectServiceById(String id) {
         return selectService(COLUMN_SERVICE_ID, id);
     }
 
-    private Deque<Service> selectService(String column, String value) {
+    private List<Service> selectService(String column, String value) {
         try {
             return dao.select(TABLE_SERVICE, COLUMNS_SERVICE)
                     .where(column, value)
@@ -31,7 +31,7 @@ public class ServiceDao {
         } catch (SQLException e) {
             log.log(Level.WARN, "SELECT: Service does not exist: {}", e.getMessage(), e);
         }
-        return new ArrayDeque<>();
+        return new ArrayList<>();
     }
 
     public boolean updateService(String oldName, String newName) {
